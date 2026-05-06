@@ -45,7 +45,11 @@
   --radius-2xl: calc(var(--radius) * 1.8);
   --radius-3xl: calc(var(--radius) * 2.2);
   --radius-4xl: calc(var(--radius) * 2.6);
-  --text-2xl: clamp(5.625rem, 5.625rem + 0.45vw, 250px);
+  --text-3xl: clamp(5.625rem, 5.625rem + 0.45vw, 250px);
+  --text-2xl: clamp(3.125rem, 3.125rem + 0.45vw, 130px);
+  --text-lg: clamp(30px, 30px + 0.45vw, 100px);
+  --text-md: clamp(20px, 20px + 0.45vw, 50px);
+  --text-sm: clamp(16px, 16px + 0.45vw, 30px);
 }
 
 :root {

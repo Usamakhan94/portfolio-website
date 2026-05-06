@@ -3,15 +3,16 @@ import gsap from "gsap";
 import { useGSAP } from "@gsap/react";
 import MaskedHero from "./MaskedHero";
 import { useEffect, useRef } from "react";
-import { useMaskSize } from "@/app/store";
+import { useMaskSize, usePagesRef } from "@/app/store";
+import MaskedSkills from "./MaskedSkills";
 
 const MaskedHome = () => {
-  const { default: maskSize, increase, revert } = useMaskSize();
+  const { default: maskSize } = useMaskSize();
+  const { skills, main } = usePagesRef();
   const maskRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     handleMaskSizeChange(maskSize);
-    console.log("maskSize", maskSize);
   }, [maskSize]);
 
   const handleMaskSizeChange = (size: number) => {
@@ -21,16 +22,6 @@ const MaskedHome = () => {
       maskSize: `${size}px`,
       duration: 0.4,
       ease: "power3.out",
-    });
-  };
-
-  const handleLeave = () => {
-    if (!maskRef) return;
-    gsap.to(maskRef.current, {
-      WebkitMaskSize: "20px",
-      maskSize: "20px",
-      duration: 0.3,
-      ease: "power3.inOut",
     });
   };
 
@@ -76,11 +67,13 @@ const MaskedHome = () => {
       window.removeEventListener("mousemove", handleMove);
     };
   }, []);
+
   return (
     <main
       ref={maskRef}
-      className="absolute z-10 inset-0 bg-primary overflow-visible masked-container"
+      className="absolute z-10 w-full h-full top-0 left-0 bg-primary masked-container"
       style={{
+        height: main?.clientHeight,
         maskSize: "20px",
         WebkitMaskSize: "20px",
 
@@ -99,6 +92,8 @@ const MaskedHome = () => {
       }}
     >
       <MaskedHero />
+      <MaskedSkills />
+      <div />
     </main>
   );
 };
