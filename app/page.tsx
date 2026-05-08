@@ -5,6 +5,7 @@ import Skills from "@/components/Sections/Homepage/Skills";
 import Work from "@/components/Sections/Homepage/Work";
 import { useEffect, useRef } from "react";
 import { usePagesRef } from "./store";
+import About from "@/components/Sections/Homepage/About";
 
 export default function Home() {
   const mainRef = useRef<HTMLDivElement>(null);
@@ -21,6 +22,7 @@ export default function Home() {
       <main ref={mainRef} className="">
         <Hero />
         <Skills />
+        <About />
         <Work />
       </main>
       <MaskedHome />

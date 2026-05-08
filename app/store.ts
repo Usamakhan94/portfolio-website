@@ -10,12 +10,14 @@ type PagesRef = {
   main: HTMLDivElement | null;
   home: HTMLDivElement | null;
   skills: HTMLDivElement | null;
+  about: HTMLDivElement | null;
   work: HTMLDivElement | null;
   contact: HTMLDivElement | null;
 
   setMain: (ref: HTMLDivElement | null) => void;
   setHome: (ref: HTMLDivElement | null) => void;
   setSkills: (ref: HTMLDivElement | null) => void;
+  setAbout: (ref: HTMLDivElement | null) => void;
   setWork: (ref: HTMLDivElement | null) => void;
   setContact: (ref: HTMLDivElement | null) => void;
 };
@@ -30,12 +32,14 @@ export const usePagesRef = create<PagesRef>((set) => ({
   main: null,
   home: null,
   skills: null,
+  about: null,
   work: null,
   contact: null,
 
   setMain: (ref) => set({ main: ref }),
   setHome: (ref) => set({ home: ref }),
   setSkills: (ref) => set({ skills: ref }),
+  setAbout: (ref) => set({ about: ref }),
   setWork: (ref) => set({ work: ref }),
   setContact: (ref) => set({ contact: ref }),
 }));

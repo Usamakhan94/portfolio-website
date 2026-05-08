@@ -5,6 +5,7 @@ import MaskedHero from "./MaskedHero";
 import { useEffect, useRef } from "react";
 import { useMaskSize, usePagesRef } from "@/app/store";
 import MaskedSkills from "./MaskedSkills";
+import MaskedAbout from "./MaskedAbout";
 
 const MaskedHome = () => {
   const { default: maskSize } = useMaskSize();
@@ -93,6 +94,7 @@ const MaskedHome = () => {
     >
       <MaskedHero />
       <MaskedSkills />
+      <MaskedAbout />
       <div />
     </main>
   );

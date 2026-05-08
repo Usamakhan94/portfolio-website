@@ -48,10 +48,6 @@ const Skills = () => {
   ];
 
   useGSAP(() => {
-    if (containerRef.current) {
-      setSkills(containerRef.current);
-    }
-
     headingsRef.current.forEach((el) => {
       gsap.fromTo(
         el,
@@ -75,12 +71,12 @@ const Skills = () => {
   return (
     <section ref={containerRef} className="py-30">
       <div>
-        <div className="max-w-[80%] mx-auto">
-          <h2 className=" tracking-widest text-lg font-semibold font-orbitron text-primary">
+        <div className="max-w-[80%] mx-auto mb-14">
+          <h2 className=" tracking-widest text-sm font-medium font-orbitron text-primary">
             WHAT I DO
           </h2>
         </div>
-        <div className="pt-10">
+        <div>
           {skillSet.map((skill, index) => (
             <div
               onMouseOver={() => change(0)}

@@ -29,7 +29,7 @@ const MaskedHero = () => {
           </TextReveal>
         </h1>
       </div>
-      <div className="container flex justify-between items-center pb-10">
+      <div className="max-w-[80%] mx-auto flex justify-between items-center pb-10">
         {cummaryDetails.map((item, index) => (
           <span
             onMouseOver={() => change(100)}
