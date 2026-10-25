@@ -32,6 +32,7 @@
   --color-muted: var(--muted);
   --color-secondary-foreground: var(--secondary-foreground);
   --color-secondary: var(--secondary);
+  --color-light: var(--light);
   --color-primary-foreground: var(--primary-foreground);
   --color-primary: var(--primary);
   --color-popover-foreground: var(--popover-foreground);
@@ -49,17 +50,18 @@
   --text-2xl: clamp(80px, 80px + 0.45vw, 180px);
   --text-lg: clamp(30px, 30px + 0.45vw, 100px);
   --text-md: clamp(20px, 20px + 0.45vw, 50px);
-  --text-sm: clamp(16px, 16px + 0.45vw, 30px);
+  --text-sm: clamp(12px, 16px + 0.2vw, 30px);
 }
 
 :root {
-  --background: #05080b;
-  --foreground: #b7ab98;
+  --background: #010101;
+  --light: #e9e8ed;
+  --foreground: #e9e8ed;
   --card: oklch(1 0 0);
   --card-foreground: oklch(0.145 0 0);
   --popover: oklch(1 0 0);
   --popover-foreground: oklch(0.145 0 0);
-  --primary: #cdd7df;
+  --primary: #2fb6a2;
   --primary-foreground: oklch(0.985 0 0);
   --secondary: oklch(0.97 0 0);
   --secondary-foreground: oklch(0.205 0 0);
@@ -132,6 +134,7 @@
     @apply bg-background text-foreground font-sans;
   }
 }
+
 @layer utilities {
   .container {
     @apply mx-auto;
@@ -150,4 +153,80 @@
 .animate-glow {
   background-size: 200% 200%;
   animation: glow-move 8s linear infinite;
+}
+
+.page-root {
+  isolation: isolate;
+  position: relative;
+}
+.portfolio-page {
+  position: relative;
+}
+.masked-container {
+  background: var(--primary);
+  left: 0;
+  overflow: hidden;
+  pointer-events: none;
+  position: absolute;
+  top: 0;
+  width: 100%;
+  z-index: 20;
+  /* transition:
+    mask-size 350ms cubic-bezier(0.22, 1, 0.36, 1),
+    -webkit-mask-size 350ms cubic-bezier(0.22, 1, 0.36, 1); */
+}
+.mask-copy-host,
+.mask-copy {
+  min-height: 100%;
+  width: 100%;
+}
+.mask-copy {
+  background: var(--primary);
+  color: #051713;
+}
+.mask-copy * {
+  border-color: rgba(3, 24, 20, 0.22) !important;
+  color: #061713 !important;
+}
+.mask-copy .hero,
+.mask-copy .about,
+.mask-copy .services,
+.mask-copy .work,
+.mask-copy .experience,
+.mask-copy .toolkit,
+.mask-copy .testimonial,
+.mask-copy .contact-cta,
+.mask-copy .site-footer {
+  background: transparent !important;
+}
+.mask-copy .site-header {
+  background: rgba(47, 182, 162, 0.92);
+}
+.mask-copy .hero-glow,
+.mask-copy .line-waves-container {
+  display: none;
+}
+.mask-copy .hero h1 span {
+  color: #f1fffb !important;
+}
+.mask-copy .button-primary {
+  background: #061713 !important;
+  color: #76ead5 !important;
+}
+.mask-copy .project-card,
+.mask-copy .skill-item {
+  background: rgba(5, 34, 28, 0.09) !important;
+}
+.mask-copy .project-image img {
+  opacity: 0.2;
+}
+.mask-copy .portrait-card {
+  background: rgba(5, 34, 28, 0.09) !important;
+}
+
+.mask-copy .service-title-reveal {
+  clip-path: inset(0 100% 0 0) !important;
+}
+.mask-copy .about-copy > p {
+  clip-path: none !important;
 }

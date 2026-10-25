@@ -1,33 +1,72 @@
+"use client";
+
+import { FaFacebookF, FaInstagram, FaLinkedinIn } from "react-icons/fa6";
 import { useMaskSize, usePagesRef } from "@/app/store";
-import gsap from "gsap";
-import { ScrollTrigger, SplitText } from "gsap/all";
 
-gsap.registerPlugin(ScrollTrigger, SplitText);
+const socials = [
+  { Icon: FaFacebookF, label: "Facebook" },
+  { Icon: FaInstagram, label: "Instagram" },
+  { Icon: FaLinkedinIn, label: "LinkedIn" },
+];
 
-const MaskedAbout = () => {
-  const { about } = usePagesRef();
-  const { change, revert } = useMaskSize();
+export default function MaskedAbout() {
+  const about = usePagesRef((state) => state.about);
+  const changeMaskSize = useMaskSize((state) => state.change);
+  const revertMaskSize = useMaskSize((state) => state.revert);
 
   return (
-    <section style={{ height: about?.clientHeight }} className="py-30">
-      <div className="max-w-[80%] mx-auto mb-14">
-        <h2 className="tracking-widest text-sm font-medium font-orbitron text-primary">
-          ABOUT ME
-        </h2>
-      </div>
+    <section
+      className="about overflow-hidden px-[8%] pt-20 md:pt-28"
+      style={{ height: about?.offsetHeight ?? 0 }}
+    >
+      <div className="container">
+        <div className="mb-8 flex items-center gap-3">
+          <h2 className="font-orbitron text-sm font-semibold tracking-wide text-foreground">
+            About me
+          </h2>
+        </div>
 
-      <div className="max-w-[80%] mx-auto relative">
-        <p
-          onMouseOver={() => change(400)}
-          onMouseLeave={revert}
-          className="text-black text-2xl font-bold font-orbitron "
-        >
-          I’m a skilled developer with strong focus on fixing bugs I didn’t
-          create & producing high quality digital experiences.
-        </p>
+        <div className="grid items-end gap-10 md:grid-cols-[1.2fr_.8fr] md:gap-12">
+          <div className="about-copy pb-16 md:pb-28">
+            <div
+              className="cursor-none"
+              onMouseEnter={() => changeMaskSize(400)}
+              onMouseLeave={revertMaskSize}
+            >
+              <h3 className="font-orbitron text-[clamp(1.4rem,3vw,2.6rem)] font-bold uppercase leading-[1.4] text-foreground">
+                I’m a <span className="text-primary">skilled developer</span>{" "}
+                with strong focus on fixing bugs I didn’t create &amp; producing
+                high quality digital experiences.
+              </h3>
+            </div>
+
+            <div className="mt-6 flex items-center gap-2">
+              {socials.map(({ Icon, label }) => (
+                <span
+                  key={label}
+                  aria-hidden="true"
+                  className="inline-flex size-9 items-center justify-center rounded-full border border-foreground/40 text-foreground"
+                >
+                  <Icon size={13} />
+                </span>
+              ))}
+            </div>
+          </div>
+
+          {/* identical box to the base portrait so the row height matches */}
+          <div
+            className="portrait-card relative mx-auto w-full max-w-md self-end md:max-w-lg"
+            aria-hidden="true"
+          >
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+              src="/usama.png"
+              alt=""
+              className="relative z-10 block h-auto w-full mix-blend-multiply grayscale contrast-125"
+            />
+          </div>
+        </div>
       </div>
     </section>
   );
-};
-
-export default MaskedAbout;
+}

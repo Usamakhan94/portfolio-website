@@ -1,48 +1,41 @@
+"use client";
+
 import { useMaskSize, usePagesRef } from "@/app/store";
 import TextReveal from "@/components/ui/TextReveal";
 
-const MaskedHero = () => {
-  const { change, revert } = useMaskSize();
-  const { home } = usePagesRef();
-  const maskContainerCss =
-    "max-w-[58%] mx-auto flex flex-col items-center relative pt-36 pb-43.75";
+const details = [
+  "Backlog Bugistan",
+  "Overthinking in Frontend Development",
+  "4+ Years Regression",
+];
 
-  const cummaryDetails = [
-    "Karachi Pakistan",
-    "Specializing in Frontend Development",
-    "4+ Years Experience",
-  ];
+export default function MaskedHero() {
+  const changeMaskSize = useMaskSize((state) => state.change);
+  const revertMaskSize = useMaskSize((state) => state.revert);
+  const home = usePagesRef((state) => state.home);
 
   return (
-    <section style={{ height: home?.clientHeight }}>
-      <div className={maskContainerCss}>
-        <span className="uppercase tracking-widest text-center text-black text-[24px] font-semibold font-orbitron underline pb-4">
+    <section
+      className="hero relative isolate flex min-h-[100svh] flex-col justify-center overflow-hidden px-[5%] pb-24 pt-20 text-center"
+      style={{ height: home?.offsetHeight ?? 0 }}
+    >
+      <div className="relative z-10 mx-auto flex w-full max-w-[760px] flex-col items-center">
+        <span className="inline-flex items-center rounded-full border border-black/20 bg-black/5 px-5 py-2 text-[10px] font-medium tracking-wide text-black">
           Usama Khan
         </span>
         <h1
-          className="text-3xl text-black font-bold text-center font-orbitron leading-[1.12] cursor-none"
-          onMouseOver={() => change(400)}
-          onMouseLeave={revert}
+          onMouseEnter={() => changeMaskSize(400)}
+          onMouseLeave={revertMaskSize}
+          className="mt-7 max-w-[760px] cursor-none font-orbitron text-[clamp(2rem,6vw,4.5rem)] font-bold leading-[1.16] tracking-tight text-black"
         >
           <TextReveal>
-            Writing Code, Breaking Things, Then Fixing Them
+            Turning Muffin into<br />Bugs And Bugs into<br />Features
           </TextReveal>
         </h1>
       </div>
-      <div className="max-w-[80%] mx-auto flex justify-between items-center pb-10">
-        {cummaryDetails.map((item, index) => (
-          <span
-            onMouseOver={() => change(100)}
-            onMouseLeave={revert}
-            key={index + 1}
-            className="text-black font-bold font-orbitron"
-          >
-            {item}
-          </span>
-        ))}
+      <div className="hero-meta absolute inset-x-[5%] bottom-8 z-10 flex flex-wrap items-center justify-between gap-x-6 gap-y-3 font-orbitron text-[16px] font-medium text-black/90">
+        {details.map((detail) => <span key={detail}>{detail}</span>)}
       </div>
     </section>
   );
-};
-
-export default MaskedHero;
+}

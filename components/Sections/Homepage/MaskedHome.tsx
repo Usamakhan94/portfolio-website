@@ -1,91 +1,93 @@
 "use client";
+
 import gsap from "gsap";
 import { useGSAP } from "@gsap/react";
-import MaskedHero from "./MaskedHero";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useMaskSize, usePagesRef } from "@/app/store";
-import MaskedSkills from "./MaskedSkills";
-import MaskedAbout from "./MaskedAbout";
+import MaskedHero from "@/components/Sections/Homepage/MaskedHero";
+import MaskedAbout from "@/components/Sections/Homepage/MaskedAbout";
+import MaskedServices from "@/components/Sections/Homepage/MaskedServices";
+import MaskedWork from "@/components/Sections/Homepage/MaskedWork";
+import MaskedExperience from "@/components/Sections/Homepage/MaskedExperience";
+import MaskedSkills from "@/components/Sections/Homepage/MaskedSkills";
+import MaskedTestimonials from "@/components/Sections/Homepage/MaskedTestimonials";
+import MaskedContact from "@/components/Sections/Homepage/MaskedContact";
+import MaskedFooter from "@/components/Sections/Homepage/MaskedFooter";
 
-const MaskedHome = () => {
-  const { default: maskSize } = useMaskSize();
-  const { skills, main } = usePagesRef();
+export default function MaskedHome() {
+  const main = usePagesRef((state) => state.main);
+  const maskSize = useMaskSize((state) => state.default);
   const maskRef = useRef<HTMLDivElement>(null);
+  const [height, setHeight] = useState(0);
 
   useEffect(() => {
-    handleMaskSizeChange(maskSize);
-  }, [maskSize]);
-
-  const handleMaskSizeChange = (size: number) => {
-    if (!maskRef) return;
-    gsap.to(maskRef.current, {
-      WebkitMaskSize: `${size}px`,
-      maskSize: `${size}px`,
-      duration: 0.4,
-      ease: "power3.out",
-    });
-  };
+    if (!main) return;
+    const syncHeight = () => setHeight(main.offsetHeight);
+    syncHeight();
+    const observer = new ResizeObserver(syncHeight);
+    observer.observe(main);
+    window.addEventListener("resize", syncHeight);
+    return () => {
+      observer.disconnect();
+      window.removeEventListener("resize", syncHeight);
+    };
+  }, [main]);
 
   useGSAP(() => {
     const mask = maskRef.current;
     if (!mask) return;
 
-    let viewportX = 0;
-    let viewportY = 0;
+    let pointerX = -1000;
+    let pointerY = -1000;
+    let currentX = pointerX;
+    let currentY = pointerY;
+    let currentSize = useMaskSize.getState().default;
+    let frame = 0;
 
-    let currentX = 0;
-    let currentY = 0;
+    const handleMove = (event: MouseEvent) => {
+      pointerX = event.clientX;
+      pointerY = event.clientY;
+    };
 
     const update = () => {
       const rect = mask.getBoundingClientRect();
+      const targetSize = useMaskSize.getState().default;
 
-      const mouseX = viewportX - rect.left;
-      const mouseY = viewportY - rect.top;
+      currentX += (pointerX - rect.left - currentX) * 0.18;
+      currentY += (pointerY - rect.top - currentY) * 0.18;
+      currentSize += (targetSize - currentSize) * 0.12; // size easing
 
-      currentX += (mouseX - currentX) * 0.15;
-      currentY += (mouseY - currentY) * 0.15;
+      const x = currentX - currentSize / 2;
+      const y = currentY - currentSize / 2;
 
-      const size = parseInt(mask.style.maskSize || "20");
+      mask.style.maskSize = `${currentSize}px ${currentSize}px`;
+      mask.style.setProperty(
+        "-webkit-mask-size",
+        `${currentSize}px ${currentSize}px`,
+      );
+      mask.style.maskPosition = `${x}px ${y}px`;
+      mask.style.setProperty("-webkit-mask-position", `${x}px ${y}px`);
 
-      gsap.set(mask, {
-        WebkitMaskPosition: `${currentX - size / 2}px ${currentY - size / 2}px`,
-        maskPosition: `${currentX - size / 2}px ${currentY - size / 2}px`,
-      });
-
-      requestAnimationFrame(update);
-    };
-
-    update();
-
-    const handleMove = (e: MouseEvent) => {
-      viewportX = e.clientX;
-      viewportY = e.clientY;
+      frame = requestAnimationFrame(update);
     };
 
     window.addEventListener("mousemove", handleMove);
-
+    frame = requestAnimationFrame(update);
     return () => {
       window.removeEventListener("mousemove", handleMove);
+      cancelAnimationFrame(frame);
     };
   }, []);
 
   return (
-    <main
+    <div
       ref={maskRef}
-      className="absolute z-10 w-full h-full top-0 left-0 bg-primary masked-container"
+      className="masked-container mask-copy"
+      aria-hidden="true"
       style={{
-        height: main?.clientHeight,
-        maskSize: "20px",
-        WebkitMaskSize: "20px",
-
-        maskPosition: `
-      calc(var(--x) - var(--size) / 2) calc(var(--y) - var(--size) / 2),
-      center
-    `,
-        WebkitMaskPosition: `
-      calc(var(--x) - var(--size) / 2) calc(var(--y) - var(--size) / 2),
-      center
-    `,
+        height,
+        maskSize: `${maskSize}px`,
+        WebkitMaskSize: `${maskSize}px`,
         maskImage: "url(/cursor.svg)",
         WebkitMaskImage: "url(/cursor.svg)",
         maskRepeat: "no-repeat",
@@ -93,11 +95,14 @@ const MaskedHome = () => {
       }}
     >
       <MaskedHero />
-      <MaskedSkills />
       <MaskedAbout />
-      <div />
-    </main>
+      <MaskedServices />
+      <MaskedWork />
+      <MaskedExperience />
+      <MaskedSkills />
+      <MaskedTestimonials />
+      <MaskedContact />
+      <MaskedFooter />
+    </div>
   );
-};
-
-export default MaskedHome;
+}
